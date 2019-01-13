@@ -14,6 +14,7 @@
 library(httr)
 library(xml2)
 library(stringr)
+library(ggplot2)
 
 
 
@@ -26,11 +27,11 @@ page <- content(link, "text", encoding = "ISO-8859-1")
 parse <- read_html(page)
 links <- xml_find_all(parse, "//@href") 
 links <- xml_text(links)
-df <- data.frame(url=character(), status=character(), stringsAsFactors = FALSE)
+df <- data.frame(url=character(), status=integer(), stringsAsFactors = FALSE)
 de <- list()
 
 ### 1.4 Exploración de enlaces
-w <- 1
+
 for(item in links){
   de <- list()
   https_t <- str_detect(item, "htt")
@@ -44,15 +45,20 @@ for(item in links){
     de <- c(de, status=status)
     df[nrow(df) + 1,] = de
   }
-  w <- w+1
 }
-print(w)
 
 ### Gráficos en R
 
 ### 2.1 Histograma
 
+
+hist(df$status)
+
+
 ### 2.2 Un gráfico de barras
+
+bar_plot(df)
 
 ### 2.3 Pie Chart
 
+pie_chart(df$status)
